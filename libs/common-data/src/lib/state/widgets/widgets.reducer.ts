@@ -1,4 +1,5 @@
 import { Widget } from '@workspace/common-data';
+import { Action } from '@ngrx/store';
 
 const initialWidgets = [
   {
@@ -26,3 +27,21 @@ const updateWidget = (widgets, widget) => widgets.map(w => {
   return w.id === widget.id ? Object.assign({}, widget) : w;
 });
 const deleteWidget = (widgets, widget) => widgets.filter(w => widget.id !== w.id);
+
+// Define the shape of the state
+export interface WidgetState {
+  selectedWidgetId: string | null;
+  widgets: Widget[];
+}
+
+export const initialState: WidgetState = {
+  selectedWidgetId: null,
+  widgets: initialWidgets
+}
+
+export function widgetsReducer(state = initialState, action: Action) {
+  switch (action.type) {
+    default:
+      return state;
+  }
+}

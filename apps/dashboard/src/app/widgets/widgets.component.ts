@@ -1,16 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { Widget, WidgetsService } from '@workspace/common-data';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Widget, WidgetsService, WidgetState } from '@workspace/common-data';
+import { Observable } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-widgets',
   templateUrl: './widgets.component.html',
-  styleUrls: ['./widgets.component.css']
+  styleUrls: ['./widgets.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WidgetsComponent implements OnInit {
-  widgets: Widget[];
+  widgets$: Observable<Widget[]>;
   currentWidget: Widget;
 
-  constructor(private widgetsService: WidgetsService) { }
+  constructor(
+    private widgetsService: WidgetsService,
+    private store: Store<WidgetState>
+  ) {
+    this.widgets$ = store.pipe(
+      select('widgets'),
+      map((state: WidgetState) => state.widgets)
+    );
+  }
 
   ngOnInit() {
     this.getWidgets();
@@ -30,8 +42,7 @@ export class WidgetsComponent implements OnInit {
   }
 
   getWidgets() {
-    this.widgetsService.all()
-      .subscribe((widgets: Widget[]) => this.widgets = widgets);
+    this.widgets$ = this.widgetsService.all();
   }
 
   saveWidget(widget) {

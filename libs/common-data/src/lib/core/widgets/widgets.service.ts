@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Widget } from './widget.model';
+import { Observable } from 'rxjs';
 
 const BASE_URL = 'http://localhost:3000/widgets/';
 const HEADER = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
@@ -11,8 +12,8 @@ export class WidgetsService {
   constructor(private http: HttpClient) {
   }
 
-  all() {
-    return this.http.get(BASE_URL);
+  all(): Observable<Widget[]> {
+    return this.http.get<Widget[]>(BASE_URL);
   }
 
   load(id) {
