@@ -8,10 +8,11 @@ export { WidgetsService } from './lib/core/widgets/widgets.service';
 
 export { ItemsFacade } from './lib/state/items/items.facade';
 
-export { WidgetState } from './lib/state/widgets/widgets.reducer';
+export { initialWidgets, WidgetState } from './lib/state/widgets/widgets.reducer';
 
 export {
   SelectWidget,
+  LoadWidgets,
   AddWidget,
   UpdateWidget,
   DeleteWidget,

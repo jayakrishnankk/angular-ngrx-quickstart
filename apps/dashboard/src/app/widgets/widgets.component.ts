@@ -1,5 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { AddWidget, DeleteWidget, UpdateWidget, Widget, WidgetState } from '@workspace/common-data';
+import {
+  AddWidget,
+  DeleteWidget,
+  initialWidgets,
+  LoadWidgets,
+  UpdateWidget,
+  Widget,
+  WidgetState
+} from '@workspace/common-data';
 import { Observable } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
@@ -17,7 +25,8 @@ export class WidgetsComponent implements OnInit {
   constructor(private store: Store<WidgetState>) {
     this.widgets$ = store.pipe(
       select('widgets'),
-      map((state: WidgetState) => state.widgets)
+      map((state: WidgetState) => state.entities),
+      map(data => Object.keys(data).map(k => data[k]))
     );
   }
 
@@ -39,7 +48,7 @@ export class WidgetsComponent implements OnInit {
   }
 
   getWidgets() {
-    this.store.dispatch({type: 'widgets'});
+    this.store.dispatch(new LoadWidgets(initialWidgets))
   }
 
   saveWidget(widget: Widget) {

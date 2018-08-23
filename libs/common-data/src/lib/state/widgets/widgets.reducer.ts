@@ -1,7 +1,8 @@
 import { Widget } from '@workspace/common-data';
 import { WidgetsActions, WidgetsActionTypes } from './widgets.actions';
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 
-const initialWidgets = [
+export const initialWidgets = [
   {
     id: "1",
     name: "Red Widget",
@@ -22,48 +23,35 @@ const initialWidgets = [
   },
 ];
 
-const createWidget = (widgets, widget) => [...widgets, widget];
-const updateWidget = (widgets, widget) => widgets.map(w => {
-  return w.id === widget.id ? Object.assign({}, widget) : w;
-});
-const deleteWidget = (widgets, widget) => widgets.filter(w => widget.id !== w.id);
-
 // Define the shape of the state
-export interface WidgetState {
+export interface WidgetState extends EntityState<Widget>{
   selectedWidgetId: string | null;
-  widgets: Widget[];
 }
 
-export const initialState: WidgetState = {
-  selectedWidgetId: null,
-  widgets: initialWidgets
-};
+export const adapter: EntityAdapter<Widget> = createEntityAdapter<Widget>();
+export const initialState: WidgetState = adapter.getInitialState({
+  selectedWidgetId: null
+});
 
 export function widgetsReducer(state = initialState, action: WidgetsActions): WidgetState {
   switch (action.type) {
     case WidgetsActionTypes.WidgetSelected:
       return {
-        selectedWidgetId: action.payload,
-        widgets: state.widgets
+        ...state,
+        selectedWidgetId: action.payload
       };
+
+    case WidgetsActionTypes.LoadWidgets:
+      return adapter.addAll(action.payload, state);
 
     case WidgetsActionTypes.AddWidget:
-      return {
-        selectedWidgetId: action.payload.id,
-        widgets: createWidget(state.widgets, action.payload)
-      };
+      return adapter.addOne(action.payload, state);
 
     case WidgetsActionTypes.UpdateWidget:
-      return {
-        selectedWidgetId: state.selectedWidgetId,
-        widgets: updateWidget(state.widgets, action.payload)
-      };
+      return adapter.upsertOne(action.payload, state);
 
     case WidgetsActionTypes.DeleteWidget:
-      return {
-        selectedWidgetId: null,
-        widgets: deleteWidget(state.widgets, action.payload)
-      };
+      return adapter.removeOne(action.payload, state);
 
     default:
       return state;
