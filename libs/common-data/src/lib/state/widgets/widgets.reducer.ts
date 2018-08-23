@@ -37,10 +37,34 @@ export interface WidgetState {
 export const initialState: WidgetState = {
   selectedWidgetId: null,
   widgets: initialWidgets
-}
+};
 
 export function widgetsReducer(state = initialState, action: Action) {
   switch (action.type) {
+    case 'select':
+      return {
+        selectedWidgetId: (<any>action).payload,
+        widgets: state.widgets
+      };
+
+    case 'create':
+      return {
+        selectedWidgetId: state.selectedWidgetId,
+        widgets: createWidget(state.widgets, (<any>action).payload)
+      };
+
+    case 'update':
+      return {
+        selectedWidgetId: state.selectedWidgetId,
+        widgets: updateWidget(state.widgets, (<any>action).payload)
+      };
+
+    case 'delete':
+      return {
+        selectedWidgetId: null,
+        widgets: deleteWidget(state.widgets, (<any>action).payload)
+      };
+
     default:
       return state;
   }

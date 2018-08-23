@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Widget, WidgetsService, WidgetState } from '@workspace/common-data';
+import { Widget, WidgetState } from '@workspace/common-data';
 import { Observable } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
@@ -14,10 +14,7 @@ export class WidgetsComponent implements OnInit {
   widgets$: Observable<Widget[]>;
   currentWidget: Widget;
 
-  constructor(
-    private widgetsService: WidgetsService,
-    private store: Store<WidgetState>
-  ) {
+  constructor(private store: Store<WidgetState>) {
     this.widgets$ = store.pipe(
       select('widgets'),
       map((state: WidgetState) => state.widgets)
@@ -42,7 +39,7 @@ export class WidgetsComponent implements OnInit {
   }
 
   getWidgets() {
-    this.widgets$ = this.widgetsService.all();
+    this.store.dispatch({type: 'widgets'});
   }
 
   saveWidget(widget) {
@@ -54,26 +51,14 @@ export class WidgetsComponent implements OnInit {
   }
 
   createWidget(widget) {
-    this.widgetsService.create(widget)
-      .subscribe(response => {
-        this.getWidgets();
-        this.resetCurrentWidget();
-      });
+    this.store.dispatch({type: 'create', payload: widget});
   }
 
   updateWidget(widget) {
-    this.widgetsService.update(widget)
-      .subscribe(response => {
-        this.getWidgets();
-        this.resetCurrentWidget();
-      });
+    this.store.dispatch({type: 'update', payload: widget});
   }
 
   deleteWidget(widget) {
-    this.widgetsService.delete(widget)
-      .subscribe(response => {
-        this.getWidgets();
-        this.resetCurrentWidget();
-      });
+    this.store.dispatch({type: 'delete', payload: widget.id});
   }
 }
