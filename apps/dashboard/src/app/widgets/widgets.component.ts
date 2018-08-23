@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Widget, WidgetState } from '@workspace/common-data';
+import { AddWidget, DeleteWidget, UpdateWidget, Widget, WidgetState } from '@workspace/common-data';
 import { Observable } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
@@ -42,7 +42,7 @@ export class WidgetsComponent implements OnInit {
     this.store.dispatch({type: 'widgets'});
   }
 
-  saveWidget(widget) {
+  saveWidget(widget: Widget) {
     if (!widget.id) {
       this.createWidget(widget);
     } else {
@@ -50,15 +50,15 @@ export class WidgetsComponent implements OnInit {
     }
   }
 
-  createWidget(widget) {
-    this.store.dispatch({type: 'create', payload: widget});
+  createWidget(widget: Widget): void {
+    this.store.dispatch(new AddWidget(widget));
   }
 
-  updateWidget(widget) {
-    this.store.dispatch({type: 'update', payload: widget});
+  updateWidget(widget: Widget): void {
+    this.store.dispatch(new UpdateWidget(widget));
   }
 
-  deleteWidget(widget) {
-    this.store.dispatch({type: 'delete', payload: widget.id});
+  deleteWidget(widget: Widget): void {
+    this.store.dispatch(new DeleteWidget(widget.id));
   }
 }
