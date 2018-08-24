@@ -14,6 +14,31 @@ export const reducers: ActionReducerMap<AppState> = {
 };
 
 // -------------------------------------------------------------------
+// WIDGET SELECTORS
+// -------------------------------------------------------------------
+export const selectWidgetState = createFeatureSelector<fromWidgets.WidgetState>('widgets');
+
+export const selectAllWidgets = createSelector(
+  selectWidgetState,
+  fromWidgets.selectAllWidgets
+);
+
+export const selectAllIds = createSelector(
+  selectWidgetState,
+  fromWidgets.selectWidgetIds
+);
+
+export const selectWidgetEntities = createSelector(
+  selectWidgetState,
+  fromWidgets.selectWidgetEntities
+);
+
+export const selectWidgetIds = createSelector(
+  selectWidgetState,
+  fromWidgets.selectWidgetIds
+);
+
+// -------------------------------------------------------------------
 // ITEMS SELECTORS
 // -------------------------------------------------------------------
 export const selectItemItemsState = createFeatureSelector<fromItems.ItemsState>('items');

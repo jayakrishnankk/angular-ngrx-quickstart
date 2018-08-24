@@ -4,13 +4,13 @@ import {
   DeleteWidget,
   initialWidgets,
   LoadWidgets,
+  selectAllWidgets,
   UpdateWidget,
   Widget,
   WidgetState
 } from '@workspace/common-data';
 import { Observable } from 'rxjs';
 import { select, Store } from '@ngrx/store';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-widgets',
@@ -23,11 +23,7 @@ export class WidgetsComponent implements OnInit {
   currentWidget: Widget;
 
   constructor(private store: Store<WidgetState>) {
-    this.widgets$ = store.pipe(
-      select('widgets'),
-      map((state: WidgetState) => state.entities),
-      map(data => Object.keys(data).map(k => data[k]))
-    );
+    this.widgets$ = store.pipe(select(selectAllWidgets));
   }
 
   ngOnInit() {
