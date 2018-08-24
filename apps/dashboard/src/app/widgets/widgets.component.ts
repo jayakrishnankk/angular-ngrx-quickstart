@@ -1,17 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import {
-  AddWidget,
-  DeleteWidget,
-  LoadWidgets,
-  selectAllWidgets,
-  selectCurrentWidget,
-  SelectWidget,
-  UpdateWidget,
-  Widget,
-  WidgetState
-} from '@workspace/common-data';
+import { Widget, WidgetsFacade } from '@workspace/common-data';
 import { Observable } from 'rxjs';
-import { select, Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-widgets',
@@ -23,14 +12,14 @@ export class WidgetsComponent implements OnInit {
   widgets$: Observable<Widget[]>;
   currentWidget$: Observable<Widget>;
 
-  constructor(private store: Store<WidgetState>) {
-    this.widgets$ = store.pipe(select(selectAllWidgets));
-    this.currentWidget$ = store.pipe(select(selectCurrentWidget));
+  constructor(private facade: WidgetsFacade) {
+    this.widgets$ = facade.widgets$;
+    this.currentWidget$ = facade.currentWidget$;
+    facade.mutations$.subscribe(_ => this.resetCurrentWidget());
   }
 
   ngOnInit() {
     this.getWidgets();
-    this.resetCurrentWidget();
   }
 
   resetCurrentWidget() {
@@ -38,7 +27,7 @@ export class WidgetsComponent implements OnInit {
   }
 
   selectWidget(widget) {
-    this.store.dispatch(new SelectWidget(widget.id));
+    this.facade.selectWidget(widget.id);
   }
 
   reset(widget) {
@@ -46,7 +35,7 @@ export class WidgetsComponent implements OnInit {
   }
 
   getWidgets() {
-    this.store.dispatch(new LoadWidgets());
+    this.facade.loadAll();
   }
 
   saveWidget(widget: Widget) {
@@ -58,14 +47,14 @@ export class WidgetsComponent implements OnInit {
   }
 
   createWidget(widget: Widget): void {
-    this.store.dispatch(new AddWidget(widget));
+    this.facade.addWidget(widget);
   }
 
   updateWidget(widget: Widget): void {
-    this.store.dispatch(new UpdateWidget(widget));
+    this.facade.updateWidget(widget);
   }
 
   deleteWidget(widget: Widget): void {
-    this.store.dispatch(new DeleteWidget(widget.id));
+    this.facade.deleteWidget(widget.id);
   }
 }

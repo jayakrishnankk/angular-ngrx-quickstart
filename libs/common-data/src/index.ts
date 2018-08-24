@@ -21,3 +21,5 @@ export {
 } from './lib/state/widgets/widgets.actions';
 
 export { selectAllWidgets, selectAllItems, selectAllIds, selectWidgetIds, selectCurrentWidget } from './lib/state';
+
+export { WidgetsFacade } from './lib/state/widgets/widgets.facade';
