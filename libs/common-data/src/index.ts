@@ -20,4 +20,4 @@ export {
   WidgetsActionTypes
 } from './lib/state/widgets/widgets.actions';
 
-export { selectAllWidgets, selectAllItems, selectAllIds, selectWidgetIds } from './lib/state';
+export { selectAllWidgets, selectAllItems, selectAllIds, selectWidgetIds, selectCurrentWidget } from './lib/state';

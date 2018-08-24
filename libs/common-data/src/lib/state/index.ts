@@ -18,6 +18,11 @@ export const reducers: ActionReducerMap<AppState> = {
 // -------------------------------------------------------------------
 export const selectWidgetState = createFeatureSelector<fromWidgets.WidgetState>('widgets');
 
+export const selectCurrentWidgetId = createSelector(
+  selectWidgetState,
+  fromWidgets.getSelectedWidgetId
+);
+
 export const selectAllWidgets = createSelector(
   selectWidgetState,
   fromWidgets.selectAllWidgets
@@ -36,6 +41,15 @@ export const selectWidgetEntities = createSelector(
 export const selectWidgetIds = createSelector(
   selectWidgetState,
   fromWidgets.selectWidgetIds
+);
+
+export const selectCurrentWidget = createSelector(
+  selectWidgetEntities,
+  selectCurrentWidgetId,
+  (widgetEntities, widgetId) => {
+    const emptyWidget = { id: null, name: '', price: 0, description: '' };
+    return widgetId ? widgetEntities[widgetId] : emptyWidget;
+  }
 );
 
 // -------------------------------------------------------------------

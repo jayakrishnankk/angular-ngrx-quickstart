@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
   AddWidget,
   DeleteWidget,
-  initialWidgets,
   LoadWidgets,
   selectAllWidgets,
+  selectCurrentWidget,
+  SelectWidget,
   UpdateWidget,
   Widget,
   WidgetState
@@ -20,10 +21,11 @@ import { select, Store } from '@ngrx/store';
 })
 export class WidgetsComponent implements OnInit {
   widgets$: Observable<Widget[]>;
-  currentWidget: Widget;
+  currentWidget$: Observable<Widget>;
 
   constructor(private store: Store<WidgetState>) {
     this.widgets$ = store.pipe(select(selectAllWidgets));
+    this.currentWidget$ = store.pipe(select(selectCurrentWidget));
   }
 
   ngOnInit() {
@@ -32,11 +34,11 @@ export class WidgetsComponent implements OnInit {
   }
 
   resetCurrentWidget() {
-    this.currentWidget = { id: null, name: '', price: 0, description: '' };
+    this.selectWidget({ id: null });
   }
 
   selectWidget(widget) {
-    this.currentWidget = widget;
+    this.store.dispatch(new SelectWidget(widget.id));
   }
 
   reset(widget) {
@@ -44,7 +46,7 @@ export class WidgetsComponent implements OnInit {
   }
 
   getWidgets() {
-    this.store.dispatch(new LoadWidgets())
+    this.store.dispatch(new LoadWidgets());
   }
 
   saveWidget(widget: Widget) {
