@@ -41,7 +41,7 @@ export function widgetsReducer(state = initialState, action: WidgetsActions): Wi
         selectedWidgetId: action.payload
       };
 
-    case WidgetsActionTypes.LoadWidgets:
+    case WidgetsActionTypes.WidgetsLoaded:
       return adapter.addAll(action.payload, state);
 
     case WidgetsActionTypes.AddWidget:

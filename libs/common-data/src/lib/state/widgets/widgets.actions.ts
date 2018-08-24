@@ -4,9 +4,13 @@ import { Widget } from '@workspace/common-data';
 export enum WidgetsActionTypes {
   WidgetSelected = '[Widgets] Selected',
   LoadWidgets = '[Widgets] Load Data',
+  WidgetsLoaded = '[Widgets] Data Loaded',
   AddWidget = '[Widgets] Add Data',
+  WidgetAdded = '[Widgets] Data Added',
   UpdateWidget = '[Widgets] Update Data',
-  DeleteWidget = '[Widgets] Delete Data'
+  WidgetUpdated = '[Widgets] Data Updated',
+  DeleteWidget = '[Widgets] Delete Data',
+  WidgetDeleted = '[Widgets] Delete Data'
 }
 
 export class SelectWidget implements Action {
@@ -16,6 +20,11 @@ export class SelectWidget implements Action {
 
 export class LoadWidgets implements Action {
   readonly type = WidgetsActionTypes.LoadWidgets;
+  constructor() { }
+}
+
+export class WidgetsLoaded implements Action {
+  readonly type = WidgetsActionTypes.WidgetsLoaded;
   constructor(public payload: Widget[]) { }
 }
 
@@ -24,8 +33,18 @@ export class AddWidget implements Action {
   constructor(public payload: Widget) { }
 }
 
+export class WidgetAdded implements Action {
+  readonly type = WidgetsActionTypes.WidgetAdded;
+  constructor(public payload: Widget) { }
+}
+
 export class UpdateWidget implements Action {
   readonly type = WidgetsActionTypes.UpdateWidget;
+  constructor(public payload: Widget) { }
+}
+
+export class WidgetUpdated implements Action {
+  readonly type = WidgetsActionTypes.WidgetUpdated;
   constructor(public payload: Widget) { }
 }
 
@@ -34,8 +53,17 @@ export class DeleteWidget implements Action {
   constructor(public payload: string) { }
 }
 
+export class WidgetDeleted implements Action {
+  readonly type = WidgetsActionTypes.WidgetDeleted;
+  constructor(public payload: string) { }
+}
+
 export type WidgetsActions = SelectWidget
   | LoadWidgets
+  | WidgetsLoaded
   | AddWidget
+  | WidgetAdded
   | UpdateWidget
-  | DeleteWidget;
+  | WidgetUpdated
+  | DeleteWidget
+  | WidgetDeleted;
